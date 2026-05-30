@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Carte Mentale Interactive - Base de Données</title>
+    <style>
+        :root {
+            --bg-color: #f9f9f9;
+            --center-color: #1a3a5a;
+            --node1: #3498db; --node2: #27ae60; --node3: #9b59b6;
+            --node4: #e67e22; --node5: #f1c40f; --node6: #e91e63;
+            --node7: #1abc9c; --node8: #8e44ad;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .map-container {
+            position: relative;
+            width: 1100px;
+            height: 800px;
+        }
+
+        #svg-canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Centre */
+        .center-node {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 240px; height: 240px;
+            background: white;
+            border: 5px solid var(--center-color);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+            box-sizing: border-box;
+        }
+
+        .center-node h1 { font-size: 1.3rem; margin: 0; color: var(--center-color); }
+        .center-node p { font-size: 0.8rem; margin-top: 10px; color: #444; font-weight: 500; }
+
+        /* Noeuds */
+        .node {
+            position: absolute;
+            width: 220px;
+            z-index: 5;
+        }
+
+        .title {
+            background: var(--color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .title:hover { transform: scale(1.05); }
+
+        /* Fenêtre de définition au survol */
+        .content {
+            position: absolute;
+            top: 45px; left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            width: 280px;
+            background: white;
+            border: 2px solid var(--color);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .node:hover .content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .content h4 { margin: 0 0 5px 0; color: var(--color); text-decoration: underline; }
+        .content ul { margin: 5px 0; padding-left: 18px; }
+
+        /* Positionnement précis */
+        #n1 { top: 5%; left: 50%; transform: translateX(-50%); --color: var(--node1); }
+        #n2 { top: 35%; left: 5%; --color: var(--node2); }
+        #n3 { top: 15%; left: 5%; --color: var(--node3); } /* Colonne (enfant de table) */
+        #n4 { top: 55%; left: 5%; --color: var(--node4); } /* Ligne (enfant de table) */
+        
+        #n5 { bottom: 5%; left: 50%; transform: translateX(-50%); --color: var(--node5); }
+        #n6 { bottom: 20%; left: 20%; --color: var(--node6); }
+        #n7 { top: 45%; right: 5%; --color: var(--node7); }
+        #n8 { top: 15%; right: 15%; --color: var(--node8); }
+    </style>
+</head>
+<body>
+
+<div class="map-container" id="map">
+    <svg id="svg-canvas"></svg>
+
+    <div class="center-node" id="center">
+        <h1>BASE DE DONNÉES</h1>
+        <p>Ensemble structuré de données organisées, stockées et manipulées efficacement.</p>
+    </div>
+
+    <div class="node" id="n1" data-parent="center">
+        <div class="title">1. BASE DE DONNÉES</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Une base de données est un ensemble structuré, organisé et persistant de données, relatives à un ou plusieurs domaines.
+            <h4>Caractéristiques :</h4>
+            <ul>
+                <li>Organisée (sous forme de tables)</li>
+                <li>Non redondante</li>
+                <li>Cohérente / Persistante</li>
+                <li>Relative à un domaine précis</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="node" id="n2" data-parent="center">
+        <div class="title">2. TABLE</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Une table est un ensemble de données relatives à un même sujet. Elle est organisée sous forme de lignes et de colonnes.
+            <h4>Caractéristiques :</h4>
+            <ul>
+                <li>Chaque table décrit une entité</li>
+                <li>Composée d'attributs (colonnes)</li>
+                <li>et d'enregistrements (lignes)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="node" id="n3" data-parent="n2">
+        <div class="title">3. ATTRIBUT (COLONNE)</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Un attribut est une propriété élémentaire décrivant une entité. Il correspond à une colonne dans une table.
+            <h4>Caractéristiques :</h4>
+            <ul>
+                <li>Possède un nom</li>
+                <li>Possède un type de données</li>
+                <li>Peut avoir des contraintes (NOT NULL, UNIQUE, DEFAULT, ...)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="node" id="n4" data-parent="n2">
+        <div class="title">4. ENREGISTREMENT (LIGNE)</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Un enregistrement est une suite de valeurs qui correspond à une occurrence de l'entité décrite par la table.
+            <h4>Caractéristiques :</h4>
+            <ul>
+                <li>Une ligne dans une table</li>
+                <li>Contient une valeur pour chaque attribut</li>
+                <li>Représente un objet réel</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="node" id="n5" data-parent="center">
+        <div class="title">5. CLÉ PRIMAIRE</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Attribut (ou ensemble d'attributs) qui permet d'identifier de manière unique chaque enregistrement d'une table.
+            <h4>Caractéristiques :</h4>
+            <ul>
+                <li>Unique (aucune valeur répétée)</li>
+                <li>Non NULL</li>
+                <li>Stable (ne change pas)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="node" id="n6" data-parent="center">
+        <div class="title">6. CLÉ ÉTRANGÈRE</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Attribut d'une table qui fait référence à la clé primaire d'une autre table. Elle assure la relation entre les tables.
+            <h4>Caractéristiques :</h4>
+            <ul>
+                <li>Assure l'intégrité référentielle</li>
+                <li>Permet de lier les tables</li>
+                <li>Évite la redondance des données</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="node" id="n7" data-parent="center">
+        <div class="title">7. RELATION</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Lien logique établi entre deux tables afin d'éviter la redondance des données et d'assurer la cohérence.
+            <h4>Caractéristiques :</h4>
+            <ul>
+                <li>Basée sur les clés (primaire et étrangère)</li>
+                <li>Peut être de type 1-1, 1-N ou N-N</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="node" id="n8" data-parent="center">
+        <div class="title">8. CONTRAINTE D'INTÉGRITÉ</div>
+        <div class="content">
+            <h4>Définition :</h4>
+            Règles qui garantissent la cohérence, la validité et la fiabilité des données dans la base.
+            <h4>Types principaux :</h4>
+            <ul>
+                <li>Intégrité de domaine (type et valeur valides)</li>
+                <li>Intégrité d'entité (clé primaire unique)</li>
+                <li>Intégrité référentielle (relations correctes)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    function drawLines() {
+        const svg = document.getElementById('svg-canvas');
+        const container = document.getElementById('map').getBoundingClientRect();
+        svg.innerHTML = '';
+
+        document.querySelectorAll('.node').forEach(node => {
+            const parentId = node.getAttribute('data-parent');
+            const parent = document.getElementById(parentId);
+            
+            if (parent) {
+                const pRect = parent.getBoundingClientRect();
+                const cRect = node.querySelector('.title').getBoundingClientRect();
+
+                // Calcul du point de départ (Parent)
+                const x1 = (pRect.left + pRect.width / 2) - container.left;
+                const y1 = (pRect.top + pRect.height / 2) - container.top;
+                
+                // Calcul du point d'arrivée (Enfant)
+                const x2 = (cRect.left + cRect.width / 2) - container.left;
+                const y2 = (cRect.top + cRect.height / 2) - container.top;
+
+                const color = window.getComputedStyle(node).getPropertyValue('--color');
+                
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                // Courbe fluide de type Bézier
+                const d = `M ${x1} ${y1} C ${x1} ${(y1+y2)/2}, ${x2} ${(y1+y2)/2}, ${x2} ${y2}`;
+                
+                path.setAttribute("d", d);
+                path.setAttribute("stroke", color);
+                path.setAttribute("stroke-width", "3");
+                path.setAttribute("fill", "none");
+                path.setAttribute("stroke-linecap", "round");
+                path.setAttribute("opacity", "0.7");
+                
+                svg.appendChild(path);
+            }
+        });
+    }
+
+    window.onload = drawLines;
+    window.onresize = drawLines;
+</script>
+
+</body>
+</html>
