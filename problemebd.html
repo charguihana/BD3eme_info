@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>De Excel vers Base de Données</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background:#f4f6f8;
+    text-align:center;
+}
+
+h1{color:#2c3e50;}
+
+iframe{
+    border:1px solid gray;
+    margin:20px;
+}
+
+button{
+    padding:12px 25px;
+    font-size:18px;
+    background:#27ae60;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#219150;
+}
+
+.tableBD{
+    display:inline-block;
+    margin:20px;
+    padding:15px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+table{
+    border-collapse:collapse;
+}
+
+td,th{
+    border:1px solid #ccc;
+    padding:6px 10px;
+}
+
+#solution{
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>📊 Situation Problème</h1>
+
+<p>
+Observe le fichier Excel contenant toutes les informations mélangées.
+</p>
+
+<!-- Excel désorganisé -->
+<iframe src="notes.html" width="90%" height="400"></iframe>
+
+<p>
+❓ Que remarques-tu ?  
+<br>
+✔ Répétition des élèves  
+<br>
+✔ Répétition des matières  
+<br>
+✔ Difficulté de consultation
+</p>
+
+<button onclick="transformer()">➡ Transformer en Base de Données</button>
+
+<!-- Solution BD -->
+<div id="solution">
+
+<h1>✅ Organisation en Base de Données Relationnelle</h1>
+
+<div class="tableBD">
+<h3>Table ELEVE</h3>
+<table>
+<tr><th>idEleve</th><th>Nom</th></tr>
+<tr><td>E01</td><td>Ahmed</td></tr>
+<tr><td>E02</td><td>Sarra</td></tr>
+</table>
+</div>
+
+<div class="tableBD">
+<h3>Table MATIERE</h3>
+<table>
+<tr><th>idMatiere</th><th>Libellé</th></tr>
+<tr><td>M01</td><td>Base de données</td></tr>
+<tr><td>M02</td><td>Algorithmique</td></tr>
+</table>
+</div>
+
+<div class="tableBD">
+<h3>Table NOTE</h3>
+<table>
+<tr><th>idEleve</th><th>idMatiere</th><th>Note</th></tr>
+<tr><td>E01</td><td>M01</td><td>15</td></tr>
+<tr><td>E02</td><td>M02</td><td>17</td></tr>
+</table>
+</div>
+
+<p>
+👉 Les données sont organisées sans répétition grâce aux
+<strong>clés primaires</strong> et <strong>clés étrangères</strong>.
+</p>
+
+</div>
+
+<script>
+function transformer(){
+    document.getElementById("solution").style.display="block";
+}
+</script>
+
+</body>
+</html>

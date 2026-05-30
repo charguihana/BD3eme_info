@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Cours Base de Données</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>📚 Cours Base de Données</h1>
+  
+  </header>
+
+  <!-- CONTENU -->
+  <section class="container">
+
+    <!-- Partie 1 -->
+    
+     <h2>📘 Partie 1</h2>
+     <details>
+   <summary> <p>Introduction aux bases de données</p></summary>
+
+      <ul>
+        <li>✔️ Définition BD</li>
+        <li>✔️ Définition SGBD</li>
+        <li>✔️ Tables / Colonnes / Lignes</li>
+         <li>✔️ clé primaire/clé etrangère</li>
+          <li>✔️ contrainte d'Intégrité</li>
+      </ul>
+
+      <button onclick="goTo('seance1.html')">Commencer</button>
+      </details><br>
+
+    <!-- Partie 2 -->
+    
+      <h2>💻 Partie 2</h2>
+      <details>
+     <summary><p>Langage de définition des données mode assisté et SQL <strong>(LDD)</strong></p></summary>
+
+      <ul>
+        <li>✔️ CREATE DATABASE</li>
+        <li>✔️ CREATE TABLE</li>
+        <li>✔️ Alter / Drop /</li>
+        
+      </ul>
+
+      <button onclick="goTo('seance2_2.html')">Commencer</button></details><br>
+    
+
+     <!-- Partie 3 -->
+    
+      <h2>💻 Partie 3</h2>
+      <details>
+      <summary><p>Langage de manipulation des données<strong>(LMD)</strong></p></summary>
+
+      <ul>
+        <li>✔️ Insertion des données</li>
+        <li>✔️ Consultation des données</li>
+        <li>✔️ Mise à jour(Modification) des données</li>
+        <li>✔️ Supprission des données</li>
+        
+      </ul>
+
+      <button onclick="goTo('seancelmd.html')">Commencer</button>
+      </details><br>
+    <!-- TP -->
+      <h2>🧪 Travaux Pratiques</h2>
+      <details>
+      <summary>🧑‍💻</summary>
+
+      <ul>
+        <li>✔️ Application LDD</li>
+        <li>✔️ Application LMD</li>
+      
+      </ul>
+
+      <button onclick="goTo('tp2_2.html')">Commencer</button>
+      </details>
+    
+
+  </section>
+  <style>
+
+
+
+/* SCENE 3D */
+.scene{
+    position:relative;
+    width:300px;
+    height:300px;
+    animation:rotation 10s linear infinite;
+}
+
+@keyframes rotation{
+    from{transform:rotateY(0deg);}
+    to{transform:rotateY(360deg);}
+}
+
+/* IMAGE CYLINDRE */
+.db{
+    width:220px;
+    position:absolute;
+    left:40px;
+    top:20px;
+}
+
+/* IMAGE SQL */
+.sql{
+    width:120px;
+    position:absolute;
+    bottom:0;
+    left:90px;
+    animation:bounce 2s infinite;
+}
+
+/* animation SQL */
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+</style>
+
+
+
+
+<div class="scene">
+
+<!-- IMAGE BASE DE DONNEES -->
+<img class="db"
+src="https://cdn-icons-png.flaticon.com/512/4248/4248443.png">
+
+<!-- IMAGE SQL -->
+<img class="sql"
+src="https://cdn-icons-png.flaticon.com/512/2772/2772128.png">
+
+</div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© Projet créer par  - M<sup>me</sup> Chargui Hana</p>
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

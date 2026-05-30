@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Bac Informatique - QCM</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#e9eef3;
+    margin:0;
+}
+
+/* HEADER BAC */
+header{
+    background:#003366;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+
+.exam-info{
+    background:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+}
+
+input{
+    padding:5px;
+}
+
+/* QUESTIONS */
+.container{
+    width:80%;
+    margin:auto;
+}
+
+.question{
+    background:white;
+    padding:15px;
+    margin:15px 0;
+    border-left:5px solid #003366;
+    border-radius:6px;
+}
+
+.correct{
+    background:#d4edda;
+}
+
+.false{
+    background:#f8d7da;
+}
+
+/* BUTTON */
+button{
+    background:#003366;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0055aa;
+}
+
+#score{
+    text-align:center;
+    font-size:24px;
+    margin:20px;
+}
+
+.timer{
+    font-size:20px;
+    font-weight:bold;
+    color:red;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>République Tunisienne</h2>
+<h3>Baccalauréat Informatique</h3>
+<h4>QCM — Bases de Données</h4>
+</header>
+
+<div class="exam-info">
+<div>
+Nom : <input type="text">
+Classe : <input type="text">
+</div>
+
+<div class="timer">
+Temps restant : <span id="temps">10:00</span>
+</div>
+</div>
+
+<div class="container">
+
+<form id="quiz">
+
+<div class="question">
+<p>1. XAMPP est :</p>
+<label><input type="radio" name="q1" value="a"> Un IDE</label><br>
+<label><input type="radio" name="q1" value="b"> Un serveur local</label><br>
+<label><input type="radio" name="q1" value="c"> Un SGBD</label>
+</div>
+
+<div class="question">
+<p>2. Apache sert à :</p>
+<label><input type="radio" name="q2" value="a"> Héberger les pages web</label><br>
+<label><input type="radio" name="q2" value="b"> Stocker les images</label><br>
+<label><input type="radio" name="q2" value="c"> Compiler Java</label>
+</div>
+
+<div class="question">
+<p>3. MySQL est :</p>
+<label><input type="radio" name="q3" value="a"> Un SGBD</label><br>
+<label><input type="radio" name="q3" value="b"> Un navigateur</label><br>
+<label><input type="radio" name="q3" value="c"> Un langage</label>
+</div>
+
+<div class="question">
+<p>4. phpMyAdmin permet :</p>
+<label><input type="radio" name="q4" value="a"> Gérer MySQL graphiquement</label><br>
+<label><input type="radio" name="q4" value="b"> Installer Windows</label><br>
+<label><input type="radio" name="q4" value="c"> Compiler PHP</label>
+</div>
+
+<div class="question">
+<p>5. Une clé primaire :</p>
+<label><input type="radio" name="q5" value="a"> Identifie un enregistrement</label><br>
+<label><input type="radio" name="q5" value="b"> Peut être NULL</label><br>
+<label><input type="radio" name="q5" value="c"> Est facultative</label>
+</div>
+
+<div class="question">
+<p>6. Une clé étrangère :</p>
+<label><input type="radio" name="q6" value="a"> Relie deux tables</label><br>
+<label><input type="radio" name="q6" value="b"> Supprime une table</label><br>
+<label><input type="radio" name="q6" value="c"> Crée une vue</label>
+</div>
+
+<div class="question">
+<p>7. CREATE TABLE :</p>
+<label><input type="radio" name="q7" value="a"> Supprime table</label><br>
+<label><input type="radio" name="q7" value="b"> Crée table</label><br>
+<label><input type="radio" name="q7" value="c"> Modifie table</label>
+</div>
+
+<div class="question">
+<p>8. ON DELETE CASCADE :</p>
+<label><input type="radio" name="q8" value="a"> Suppression liée</label><br>
+<label><input type="radio" name="q8" value="b"> Ajout automatique</label><br>
+<label><input type="radio" name="q8" value="c"> Sauvegarde</label>
+</div>
+
+<div class="question">
+<p>9. Mode SQL permet :</p>
+<label><input type="radio" name="q9" value="a"> Voir le code SQL</label><br>
+<label><input type="radio" name="q9" value="b"> Installer XAMPP</label><br>
+<label><input type="radio" name="q9" value="c"> Effacer disque</label>
+</div>
+
+<div class="question">
+<p>10. Clé primaire composée :</p>
+<label><input type="radio" name="q10" value="a"> Plusieurs attributs</label><br>
+<label><input type="radio" name="q10" value="b"> Interdite</label><br>
+<label><input type="radio" name="q10" value="c"> Sans utilité</label>
+</div>
+
+</form>
+
+<center>
+<button onclick="corriger()">Valider la copie</button>
+</center>
+
+<div id="score"></div>
+
+</div>
+
+<script>
+
+/* BONNES REPONSES */
+const rep={
+q1:"b",
+q2:"a",
+q3:"a",
+q4:"a",
+q5:"a",
+q6:"a",
+q7:"b",
+q8:"a",
+q9:"a",
+q10:"a"
+};
+
+/* CORRECTION */
+function corriger(){
+
+let score=0;
+
+for(let q in rep){
+
+let r=document.querySelector('input[name="'+q+'"]:checked');
+let bloc=document.querySelector('input[name="'+q+'"]').closest('.question');
+
+bloc.classList.remove("correct","false");
+
+if(r){
+if(r.value===rep[q]){
+bloc.classList.add("correct");
+score++;
+}else{
+bloc.classList.add("false");
+}
+}
+}
+
+document.getElementById("score").innerHTML=
+"Note obtenue : "+score+" / 10";
+
+}
+
+/* CHRONOMETRE */
+let temps=600;
+
+setInterval(function(){
+
+let min=Math.floor(temps/60);
+let sec=temps%60;
+
+document.getElementById("temps").innerHTML=
+min+":"+ (sec<10?"0":"")+sec;
+
+temps--;
+
+if(temps<0){
+corriger();
+alert("Temps écoulé !");
+}
+
+},1000);
+
+</script>
+
+</body>
+</html>

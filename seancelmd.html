@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cours Interactif : Maîtriser le SQL (LMD)</title>
+    <style>
+        :root {
+            --primary: #2980b9;
+            --secondary: #27ae5f3b;
+            --accent: #e67e22;
+            --dark: #2c3e50;
+            --bg: #f4f7f6;
+        }
+
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg); color: var(--dark); padding: 20px; line-height: 1.6; }
+        .container { max-width: 850px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        
+        h1 { text-align: center; color: var(--primary); font-size: 2.2em; margin-bottom: 10px; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: 0.5s; }
+
+        .step { display: none; animation: slideIn 0.4s ease-out; }
+        .step.active { display: block; }
+
+        .badge { background: var(--accent); color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.8em; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
+        .step-title { font-size: 1.5em; font-weight: bold; margin-bottom: 15px; color: var(--dark); display: block; }
+        
+        .sql-card { background: #1e272e; color: #f1c40f; padding: 20px; border-radius: 10px; font-family: 'Consolas', monospace; position: relative; margin: 15px 0; font-size: 1.1em; border-left: 6px solid var(--primary); }
+        .copy-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 5px 10px; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        .copy-btn:hover { background: var(--primary); border-color: var(--primary); }
+
+        textarea { width: 100%; height: 90px; border: 2px solid #ddd; border-radius: 10px; padding: 15px; margin-top: 10px; resize: none; box-sizing: border-box; font-size: 1em; transition: 0.3s; }
+        textarea:focus { border-color: var(--primary); outline: none; }
+
+        .btn-group { margin-top: 25px; display: flex; gap: 15px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em; transition: 0.3s; }
+        .btn-check { background: var(--secondary); color: white; }
+        .btn-check:hover { background: #34a3e3; transform: translateY(-2px); }
+        .btn-next { background: var(--primary); color: white; display: none; }
+
+        .explanation { display: none; margin-top: 20px; padding: 20px; background: #e8f4fd; border-radius: 10px; border-left: 5px solid var(--primary); animation: fadeIn 0.5s; }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Cours de Manipulation SQL</h1>
+    <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+
+    <!-- ÉTAPE 1 : SELECT ALL -->
+    <div id="step1" class="step active">
+        <span class="badge">Notion 1 : Consultation</span>
+        <span class="step-title">Afficher toutes les données</span>
+        <div class="sql-card">
+            <span id="q1">SELECT * FROM eleve;</span>
+            <button class="copy-btn" onclick="copy('q1')">Copier</button>
+        </div>
+        <textarea id="obs1" placeholder="Exécutez la requête. Que voyez-vous s'afficher ?"></textarea>
+        <div id="res1" class="explanation">
+            <b>Leçon :</b> <p>Afficher le contenu actuel de votre table <b>eleve</b>.</p>
+            L'étoile <code>*</code> signifie "tout". On demande à MySQL d'afficher toutes les colonnes présentes dans la table.
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-check" onclick="check(1)">Vérifier</button>
+            <button class="btn btn-next" id="next1" onclick="nextStep(2)">Notion suivante ➔</button>
+        </div>
+    </div>
+
+    <!-- ÉTAPE 2 : ORDER BY -->
+    <div id="step2" class="step">
+        <span class="badge">Notion 2 : Tri</span>
+        <span class="step-title">Trier les résultats</span>
+        <p>Organisons maintenant les élèves par ordre alphabétique sur leurs noms.</p>
+        <div class="sql-card">
+            <span id="q2">SELECT * FROM eleve ORDER BY nom ASC;</span>
+            <button class="copy-btn" onclick="copy('q2')">Copier</button>
+        </div>
+        <textarea id="obs2" placeholder="Quel changement remarquez-vous dans l'ordre des lignes ?"></textarea>
+        <div id="res2" class="explanation">
+             <p>Organisons  les élèves par ordre alphabétique sur leurs noms.</p>
+            <b>Leçon :</b> <code>ORDER BY</code> permet de trier. <code>ASC</code> est pour l'ordre croissant (A-Z) et <code>DESC</code> pour l'ordre décroissant (Z-A).
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-check" onclick="check(2)">Vérifier</button>
+            <button class="btn btn-next" id="next2" onclick="nextStep(3)">Notion suivante ➔</button>
+        </div>
+    </div>
+
+    <!-- ÉTAPE 3 : LIKE -->
+    <div id="step3" class="step">
+        <span class="badge">Notion 3 : Recherche</span>
+        <span class="step-title">Recherche par motif (Le LIKE)</span>
+        <div class="sql-card">
+            <span id="q3">SELECT * FROM eleve WHERE nom LIKE 'A%';</span>
+            <button class="copy-btn" onclick="copy('q3')">Copier</button>
+        </div>
+        <textarea id="obs3" placeholder="Quels noms sont affichés ? Que fait le symbole '%' selon vous ?"></textarea>
+        <div id="res3" class="explanation">
+             <p>Cherchons tous les élèves dont le nom commence par la lettre 'A'.</p>
+            <b>Leçon :</b> <code>LIKE</code> est utilisé pour chercher des modèles de texte. Le <code>%</code> remplace n'importe quelle suite de caractères.
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-check" onclick="check(3)">Vérifier</button>
+            <button class="btn btn-next" id="next3" onclick="nextStep(4)">Notion suivante ➔</button>
+        </div>
+    </div>
+
+    <!-- ÉTAPE 4 : MONTH() -->
+    <div id="step4" class="step">
+        <span class="badge">Notion 4 : Dates</span>
+        <span class="step-title">Filtrer par mois</span>
+        <div class="sql-card">
+            <span id="q4">SELECT Nom, Prenom FROM eleve WHERE MONTH(date_naissance) = 3;</span>
+            <button class="copy-btn" onclick="copy('q4')">Copier</button>
+        </div>
+        <textarea id="obs4" placeholder="Vérifiez les colonnes de date. Quel est le point commun ?"></textarea>
+        <div id="res4" class="explanation">
+            <p>Extraire les nom et les Prenom des élèves nés durant un mois précis (ici Mars).</p>
+            <b>Leçon :</b> La fonction <code>MONTH()</code> permet d'extraire uniquement le numéro du mois d'une date (1 pour janvier, 3 pour mars, etc.).
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-check" onclick="check(4)">Vérifier</button>
+            <button class="btn btn-next" id="next4" onclick="nextStep(5)">Notion suivante ➔</button>
+        </div>
+    </div>
+
+    <!-- ÉTAPE 5 : UPDATE -->
+    <div id="step5" class="step">
+        <span class="badge">Notion 5 : Modification</span>
+        <span class="step-title">Mise à jour des données</span>
+        <div class="sql-card">
+            <span id="q5">UPDATE eleve SET ville = 'Tunis' WHERE id_eleve = E002;</span>
+            <button class="copy-btn" onclick="copy('q5')">Copier</button>
+        </div>
+        <textarea id="obs5" placeholder="Exécutez puis faites un SELECT. Qu'est-il arrivé à l'élève 2 ?"></textarea>
+        <div id="res5" class="explanation">
+             <p>Modifions la ville de l'élève qui possède l'ID numéro E002.</p>
+            <b>Leçon :</b> <code>UPDATE</code> modifie des données existantes. Le <code>WHERE</code> est indispensable, sinon <b>tous</b> les élèves habiteraient à Tunis !
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-check" onclick="check(5)">Vérifier</button>
+            <button class="btn btn-next" id="next5" onclick="nextStep(6)">Notion suivante ➔</button>
+        </div>
+    </div>
+
+    <!-- ÉTAPE 6 : DELETE -->
+    <div id="step6" class="step">
+        <span class="badge">Notion 6 : Suppression</span>
+        <span class="step-title">Supprimer un enregistrement</span>
+        <div class="sql-card">
+            <span id="q6">DELETE FROM eleve WHERE id_eleve = E005;</span>
+            <button class="copy-btn" onclick="copy('q6')">Copier</button>
+        </div>
+        <textarea id="obs6" placeholder="Après exécution et SELECT, l'élève 5 est-il encore là ?"></textarea>
+        <div id="res6" class="explanation">
+             <p>Supprimons définitivement l'élève numéro 5 de la base.</p>
+            <b>Leçon :</b> <code>DELETE</code> supprime une ligne. C'est une action irréversible. On utilise l'ID pour être sûr de supprimer le bon élève.
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-check" onclick="check(6)">Terminer le cours</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const totalSteps = 6;
+
+    function copy(id) {
+        const text = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(text);
+        alert("Requête copiée ! Collez-la dans MySQL.");
+    }
+
+    function check(n) {
+        const obs = document.getElementById('obs' + n).value;
+        if (obs.trim().length < 5) {
+            alert("Veuillez saisir votre observation avant de voir la leçon.");
+        } else {
+            document.getElementById('res' + n).style.display = 'block';
+            if(n < totalSteps) {
+                document.getElementById('next' + n).style.display = 'block';
+            } else {
+                alert("Félicitations ! Vous avez terminé ce module de cours.");
+            }
+            updateProgress(n);
+        }
+    }
+
+    function nextStep(n) {
+        document.querySelector('.step.active').classList.remove('active');
+        document.getElementById('step' + n).classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    function updateProgress(n) {
+        const percent = (n / totalSteps) * 100;
+        document.getElementById('progress').style.width = percent + '%';
+    }
+</script>
+
+</body>
+</html>
